@@ -1,29 +1,139 @@
 #include <cassert>
 #include <string>
-#include <cmath>
+
+#include "../main.cpp"
 
 using namespace std;
 
-double solveLinear(double b, double c) {
-    return -c / b;
+void testWrongInput()
+{
+    assert(
+        QuadraticSolver::solve(
+            "abc",
+            "2",
+            "3"
+        ) == "WRONG"
+    );
 }
 
-void testLinear() {
-    double x = solveLinear(2, -4);
-
-    assert(abs(x - 2.0) < 1e-9);
+void testInf()
+{
+    assert(
+        QuadraticSolver::solve(
+            "0",
+            "0",
+            "0"
+        ) == "INF"
+    );
 }
 
-void testDiscriminant() {
-    double D = 2 * 2 - 4 * 1 * 1;
-
-    assert(D == 0);
+void testNoSolutionLinear()
+{
+    assert(
+        QuadraticSolver::solve(
+            "0",
+            "0",
+            "5"
+        ) == "NO SOLUTION"
+    );
 }
 
-int main() {
+void testLinearEquation()
+{
+    string result =
+        QuadraticSolver::solve(
+            "0",
+            "2",
+            "-4"
+        );
 
-    testLinear();
-    testDiscriminant();
+    assert(
+        result.find("OK")
+        != string::npos
+    );
+
+    assert(
+        result.find("2")
+        != string::npos
+    );
+}
+
+void testOneRoot()
+{
+    string result =
+        QuadraticSolver::solve(
+            "1",
+            "2",
+            "1"
+        );
+
+    assert(
+        result.find("OK")
+        != string::npos
+    );
+}
+
+void testTwoRoots()
+{
+    string result =
+        QuadraticSolver::solve(
+            "1",
+            "-3",
+            "2"
+        );
+
+    assert(
+        result.find("OK")
+        != string::npos
+    );
+}
+
+void testNoRoots()
+{
+    string result =
+        QuadraticSolver::solve(
+            "1",
+            "0",
+            "1"
+        );
+
+    assert(
+        result == "NO SOLUTION"
+    );
+}
+
+void testNegativeCoefficient()
+{
+    string result =
+        QuadraticSolver::solve(
+            "-1",
+            "0",
+            "1"
+        );
+
+    assert(
+        result.find("OK")
+        != string::npos
+    );
+}
+
+int main()
+{
+    testWrongInput();
+
+    testInf();
+
+    testNoSolutionLinear();
+
+    testLinearEquation();
+
+    testOneRoot();
+
+    testTwoRoots();
+
+    testNoRoots();
+
+    testNegativeCoefficient();
 
     return 0;
 }
